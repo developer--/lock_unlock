@@ -4,6 +4,7 @@
 
     <uses-permission android:name="android.permission.WAKE_LOCK" />
     <uses-permission android:name="android.permission.DISABLE_KEYGUARD" />
+    <uses-feature android:name="android.hardware.sensor.accelerometer" android:required="true" />
 
     <application
         android:allowBackup="true"
@@ -34,6 +35,12 @@
             <meta-data
                 android:name="android.app.device_admin"
                 android:resource="@xml/device_admin_sample" />
+        </receiver>
+
+        <receiver android:name=".shake.ShakeReceiver">
+            <intent-filter>
+                <action android:name="shake.detector" />
+            </intent-filter>
         </receiver>
 
     </application>

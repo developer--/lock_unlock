@@ -11,6 +11,10 @@ import android.support.v4.media.session.PlaybackStateCompat
 import android.util.Log
 import android.os.PowerManager
 import android.view.WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON
+import safety.com.br.android_shake_detector.core.ShakeDetector
+import safety.com.br.android_shake_detector.core.ShakeOptions
+
+
 
 
 /**
@@ -19,6 +23,7 @@ import android.view.WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON
 class LockUnlockService : Service() {
 
     private val mgr: DevicePolicyManager by lazy { getSystemService(Context.DEVICE_POLICY_SERVICE) as DevicePolicyManager }
+    private lateinit var shakeDetector: ShakeDetector
 
     override fun onBind(intent: Intent?): IBinder? {
         return null
@@ -29,6 +34,16 @@ class LockUnlockService : Service() {
 
     override fun onCreate() {
         super.onCreate()
+
+        val options = ShakeOptions()
+                .background(true)
+                .interval(1000)
+                .shakeCount(2)
+                .sensibility(2.0f)
+
+        this.shakeDetector =  ShakeDetector(options).start(this)
+
+
         mediaSession = MediaSessionCompat(this, "PlayerService");
         mediaSession!!.setFlags(MediaSessionCompat.FLAG_HANDLES_MEDIA_BUTTONS or
                 MediaSessionCompat.FLAG_HANDLES_TRANSPORT_CONTROLS);
